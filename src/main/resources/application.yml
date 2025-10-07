@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: publi-connect
+  r2dbc:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PWD}
+    pool:
+      initial-size: 5
+      max-size: 20
+      max-idle-time: 30m
+  sql:
+    init:
+      mode: always
+  config:
+    import: optional:file:.env[.properties]
+jwt:
+  secret:
+    key: ${JWT_KEY}
+  expiration:
+    time: 86400000
+  refresh:
+    time: 25920000000

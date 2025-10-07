@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "jwt.secret.key",
+    "type": "java.lang.String",
+    "description": "The property for JWT KEY"
+  },
+  {
+    "name": "jwt.expiration.time",
+    "type": "java.lang.String",
+    "description": "The property for JWT token expiration session time in MS"
+  },
+  {
+    "name": "jwt.refresh.time",
+    "type": "java.lang.String",
+    "description": "The prroperty for JWT token expiration refresh time in MS'"
+  }
+]}
