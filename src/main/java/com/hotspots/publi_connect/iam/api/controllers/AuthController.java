@@ -10,6 +10,8 @@ import com.hotspots.publi_connect.iam.app.UserAuthService;
 
 import lombok.Data;
 import reactor.core.publisher.Mono;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -17,7 +19,8 @@ import reactor.core.publisher.Mono;
 public class AuthController {
 	private final UserAuthService authService;
 
-	public Mono<ServerResponse> registrer(@RequestBody RegisterUserRequest request) {
+	@PostMapping("/register")
+	public Mono<ServerResponse> register(@RequestBody RegisterUserRequest request) {
 		return authService.registerUser(request)
 				.flatMap(userSaved -> {
 					return ServerResponse.noContent()
