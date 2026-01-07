@@ -1,4 +1,4 @@
-package com.hotspots.publi_connect.iam.api.dto;
+package com.hotspots.publi_connect.iam.api.dto.device;
 
 import com.hotspots.publi_connect.iam.vo.DeviceUserIdsVo;
 

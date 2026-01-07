@@ -1,4 +1,4 @@
-package com.hotspots.publi_connect.iam.util;
+package com.hotspots.publi_connect.iam.domain.service;
 
 import java.util.Date;
 import java.util.UUID;
@@ -15,20 +15,20 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 @Component
-public class JwtUtil {
+public class TokenService {
 
     private final JwtConfig jwtProperties;
 
-    public JwtUtil(JwtConfig jwtProperties) {
+    public TokenService(JwtConfig jwtProperties) {
         this.jwtProperties = jwtProperties;
     }
 
     public String generateSessionToken(UUIDVo deviceId, UUIDVo userId) {
-        return generateToken(deviceId.id(), userId.id(), jwtProperties.getExpiration().getTime());
+        return generateToken(UUID.fromString(deviceId.id()), UUID.fromString(userId.id()), jwtProperties.getExpiration().getTime());
     }
 
     public String generateRefreshToken(UUIDVo deviceId, UUIDVo userId) {
-        return generateToken(deviceId.id(), userId.id(), jwtProperties.getRefreshTime());
+        return generateToken(UUID.fromString(deviceId.id()), UUID.fromString(userId.id()), jwtProperties.getRefreshTime());
     }
 
     private String generateToken(UUID deviceId, UUID userId, long expirationMs) {

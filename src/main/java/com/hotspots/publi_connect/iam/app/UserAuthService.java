@@ -3,16 +3,19 @@ package com.hotspots.publi_connect.iam.app;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.hotspots.publi_connect.iam.api.dto.CreateCredentialRequest;
-import com.hotspots.publi_connect.iam.api.dto.CreateDeviceRequest;
-import com.hotspots.publi_connect.iam.api.dto.CreateSessionRequest;
-import com.hotspots.publi_connect.iam.api.dto.RegisterUserRequest;
-import com.hotspots.publi_connect.iam.api.dto.RegisterUserResponse;
+import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountReq;
+import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountRes;
+import com.hotspots.publi_connect.iam.api.dto.credential.CreateCredentialRequest;
+import com.hotspots.publi_connect.iam.api.dto.device.CreateDeviceRequest;
+import com.hotspots.publi_connect.iam.api.dto.personal_account.CreatePersonalAccountReq;
+import com.hotspots.publi_connect.iam.api.dto.session.CreateSessionRequest;
+import com.hotspots.publi_connect.iam.domain.service.AccountService;
 import com.hotspots.publi_connect.iam.domain.service.CredentialService;
 import com.hotspots.publi_connect.iam.domain.service.DeviceService;
+import com.hotspots.publi_connect.iam.domain.service.PersonalAccountService;
 import com.hotspots.publi_connect.iam.domain.service.SessionService;
-import com.hotspots.publi_connect.iam.domain.service.UserService;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
+import com.hotspots.publi_connect.kernel.utils.mappers.CreatePersonalAccountReqMapper;
 
 import jakarta.validation.Valid;
 import lombok.Data;
@@ -22,27 +25,33 @@ import reactor.core.publisher.Mono;
 @Validated
 @Data
 public class UserAuthService {
-    private final UserService userService;
+    private final AccountService accountService;
+    private final PersonalAccountService personalAccountService;
     private final CredentialService credentialService;
     private final DeviceService deviceService;
     private final SessionService sessionService;
 
-    @Valid
-    public Mono<RegisterUserResponse> registerUser(RegisterUserRequest request) {
-        return userService.createUser(request.CreateUserRequest())
+    private final CreatePersonalAccountReqMapper createPersonalAccountReqMapper;
+
+    public Mono<RegisterPersonalAccountRes> registerPersonalAccount(@Valid RegisterPersonalAccountReq request) {
+        return accountService.createAccount(request.createAccountReq())
+                .flatMap(accountSaved -> {
+                    CreatePersonalAccountReq req = createPersonalAccountReqMapper.toValidatedRequest(request, accountSaved.accountId());
+                    return personalAccountService.createPersonalAccount(req);
+                })
                     .flatMap(userSaved -> {
-                        CreateCredentialRequest credentialRequest = new CreateCredentialRequest(new UUIDVo(userSaved.userUuid()), request.pwd());
-                        return credentialService.createCredential(credentialRequest);
-                    })
-                        .flatMap(credentialSaved -> {
-                            CreateDeviceRequest deviceRequest = new CreateDeviceRequest(credentialSaved.userId(), request.macAddress());
-                            return deviceService.createDevice(deviceRequest);
+                            CreateCredentialRequest credentialRequest = new CreateCredentialRequest(new UUIDVo(userSaved.userUuid().toString()), request.pwd());
+                            return credentialService.createCredential(credentialRequest);
                         })
-                            .flatMap(deviceSaved -> {
-                                CreateSessionRequest sessionRequest = new CreateSessionRequest(deviceSaved.deviceUserIdsVo());
-                                return sessionService.createSession(sessionRequest);
+                            .flatMap(credentialSaved -> {
+                                CreateDeviceRequest deviceRequest = new CreateDeviceRequest(new UUIDVo(credentialSaved.userId().toString()), request.macAddress());
+                                return deviceService.createDevice(deviceRequest);
                             })
-                                .map(sessionSaved -> new RegisterUserResponse(sessionSaved.responseCookies()));
+                                .flatMap(deviceSaved -> {
+                                    CreateSessionRequest sessionRequest = new CreateSessionRequest(deviceSaved.deviceUserIdsVo());
+                                    return sessionService.createSession(sessionRequest);
+                                })
+                                    .map(sessionSaved -> new RegisterPersonalAccountRes(sessionSaved.responseCookies()));
     }
 
 }

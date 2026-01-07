@@ -33,7 +33,7 @@ public class Device {
     private boolean isLogged;
 
     public Device(UUIDVo userId, MacAddressVo macAddress, ValidUntilVo validUntil, boolean isLogged) {
-        this.userId = userId.id();
+        this.userId = UUID.fromString(userId.id());
         this.macAddress = macAddress.macAddress();
         this.validUntil = validUntil.validUntil();
         this.isLogged = isLogged;

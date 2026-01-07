@@ -32,7 +32,7 @@ public class Session {
     private LocalDateTime expiresAt;
 
     public Session(UUIDVo deviceId, RefreshTokenVo token, SessionStampsVo stamps) {
-        this.deviceId = deviceId.id();
+        this.deviceId = UUID.fromString(deviceId.id());
         this.refreshToken = token.refreshToken();
         this.createdAt = stamps.createdAt();
         this.expiresAt = stamps.expiresAt();

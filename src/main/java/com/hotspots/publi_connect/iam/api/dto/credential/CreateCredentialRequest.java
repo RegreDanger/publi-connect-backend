@@ -1,4 +1,4 @@
-package com.hotspots.publi_connect.iam.api.dto;
+package com.hotspots.publi_connect.iam.api.dto.credential;
 
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
 

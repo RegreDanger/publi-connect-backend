@@ -6,13 +6,12 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.hotspots.publi_connect.iam.api.dto.CreateSessionRequest;
-import com.hotspots.publi_connect.iam.api.dto.CreateSessionResponse;
+import com.hotspots.publi_connect.iam.api.dto.session.CreateSessionRequest;
+import com.hotspots.publi_connect.iam.api.dto.session.CreateSessionResponse;
 import com.hotspots.publi_connect.iam.domain.entity.Session;
 import com.hotspots.publi_connect.iam.repository.SessionRepository;
-import com.hotspots.publi_connect.iam.util.JwtUtil;
 import com.hotspots.publi_connect.iam.vo.RefreshTokenVo;
-import com.hotspots.publi_connect.iam.vo.ResponseCookiesVo;
+import com.hotspots.publi_connect.iam.vo.ResponseCookies;
 import com.hotspots.publi_connect.iam.vo.SessionStampsVo;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
 import com.hotspots.publi_connect.platform.spring.config.JwtConfig;
@@ -26,11 +25,10 @@ import reactor.core.publisher.Mono;
 @Data
 public class SessionService {
 	private final SessionRepository repo;
-	private final JwtUtil jwt;
+	private final TokenService jwt;
 	private final JwtConfig jwtConfig;
 
-	@Valid
-	public Mono<CreateSessionResponse> createSession(CreateSessionRequest request) {
+	public Mono<CreateSessionResponse> createSession(@Valid CreateSessionRequest request) {
 		UUIDVo userId = request.deviceUserIdsVo().userId();
 		UUIDVo deviceId = request.deviceUserIdsVo().deviceId();
 		
@@ -43,12 +41,12 @@ public class SessionService {
 		
 		Session session = new Session(deviceId, refreshVo, stamps);
 		return repo.save(session).map(sessionSaved -> {
-			ResponseCookiesVo responseCookies = buildCookies(sessionToken, refreshToken, jwtConfig.getExpiration().getTime(), jwtConfig.getRefreshTime());
+			ResponseCookies responseCookies = buildCookies(sessionToken, refreshToken, jwtConfig.getExpiration().getTime(), jwtConfig.getRefreshTime());
 			return new CreateSessionResponse(responseCookies);
 		});
 	}
 
-	private ResponseCookiesVo buildCookies(String sessionToken, String refreshToken, long expirationTime, long refreshTime) {
+	private ResponseCookies buildCookies(String sessionToken, String refreshToken, long expirationTime, long refreshTime) {
 		ResponseCookie sessionCookie = ResponseCookie
 											.from("session_token", sessionToken)
 											.httpOnly(true)
@@ -65,7 +63,7 @@ public class SessionService {
 											.maxAge(refreshTime/1000)
 											.sameSite("Strict")
 											.build();
-		return new ResponseCookiesVo(sessionCookie, refreshCookie);
+		return new ResponseCookies(sessionCookie, refreshCookie);
 	}
 
 }

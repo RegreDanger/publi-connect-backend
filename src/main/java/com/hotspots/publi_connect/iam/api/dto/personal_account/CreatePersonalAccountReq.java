@@ -1,46 +1,41 @@
-package com.hotspots.publi_connect.iam.api.dto;
+package com.hotspots.publi_connect.iam.api.dto.personal_account;
 
 import com.hotspots.publi_connect.iam.vo.AgeVo;
 import com.hotspots.publi_connect.iam.vo.AuthProviderVo;
-import com.hotspots.publi_connect.iam.vo.EmailVo;
 import com.hotspots.publi_connect.iam.vo.GenderVo;
-import com.hotspots.publi_connect.iam.vo.PhoneNoVo;
+import com.hotspots.publi_connect.iam.vo.UUIDVo;
 import com.hotspots.publi_connect.iam.vo.ZipCodeVo;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateUserRequest(
+public record CreatePersonalAccountReq(
+
+	@NotNull
+	@Valid
+	UUIDVo uuidVo,
 
 	@NotBlank
-	String name,
+	String nameVo,
 	
 	@NotNull
 	@Valid
-	AgeVo age,
+	AgeVo ageVo,
 
 	@NotNull
 	@Valid
-	GenderVo gender,
+	GenderVo genderVo,
 
 	@NotNull
 	@Valid
-	EmailVo email,
+	ZipCodeVo zipCodeVo,
 
 	@NotNull
 	@Valid
-	PhoneNoVo phoneNo,
+	AuthProviderVo authProviderVo,
 
 	@NotNull
-	@Valid
-	ZipCodeVo zipCode,
-
-	@NotNull
-	@Valid
-	AuthProviderVo authProvider,
-
-	@NotNull
-	Boolean isActive
+	Boolean isActiveVo
 	
 ){}

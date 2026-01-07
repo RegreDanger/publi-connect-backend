@@ -7,6 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record AuthProviderVo(
     @NotBlank
-    @ValidEnum(enumClass = AuthProvider.class, message = "Auth provider must be Basic, Google, Apple or Facebook")
+    @ValidEnum(enumClass = AuthProvider.class, message = "authProvider must be Basic, Google, Apple or Facebook")
 	String authProvider
 ) {}

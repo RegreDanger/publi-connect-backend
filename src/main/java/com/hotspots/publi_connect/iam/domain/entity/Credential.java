@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import com.hotspots.publi_connect.iam.vo.CredentialStampsVo;
+import com.hotspots.publi_connect.iam.vo.StampsVo;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
 
 import lombok.AccessLevel;
@@ -30,8 +30,8 @@ public class Credential {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Credential(UUIDVo userId, String hashedPwd, CredentialStampsVo stamps) {
-        this.userId = userId.id();
+    public Credential(UUIDVo userId, String hashedPwd, StampsVo stamps) {
+        this.userId = UUID.fromString(userId.id());
         this.hashedPwd = hashedPwd;
         this.createdAt = stamps.createdAt();
         this.updatedAt = stamps.updatedAt();

@@ -1,0 +1,7 @@
+spring:
+  config:
+    import: "aws-secretsmanager:secretname"
+  cloud:
+    aws:
+      region:
+        static: us-east-1
