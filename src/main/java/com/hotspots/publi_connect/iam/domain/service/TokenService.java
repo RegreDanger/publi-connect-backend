@@ -33,22 +33,22 @@ public class TokenService {
 
     private String generateToken(UUID deviceId, UUID userId, long expirationMs) {
         return Jwts.builder()
-                .setSubject(userId.toString())
+                .subject(userId.toString())
                 .claim("device_id", deviceId)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(Keys.hmacShaKeyFor(jwtProperties.getSecret().getKey().getBytes()))
                 .compact();
     }
 
     public boolean isTokenValid(String token) {
         try {
-            Jws<Claims> claims = Jwts.parserBuilder()
-                                     .setSigningKey(Keys.hmacShaKeyFor(jwtProperties.getSecret().getKey().getBytes()))
+            Jws<Claims> claims = Jwts.parser()
+                                     .verifyWith(Keys.hmacShaKeyFor(jwtProperties.getSecret().getKey().getBytes()))
                                      .build()
-                                     .parseClaimsJws(token);
+                                     .parseSignedClaims(token);
 
-            Date expiration = claims.getBody().getExpiration();
+            Date expiration = claims.getPayload().getExpiration();
             return expiration.after(new Date());
 
         } catch (JwtException e) {

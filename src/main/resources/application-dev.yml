@@ -2,9 +2,12 @@ spring:
   application:
     name: publi-connect
   r2dbc:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PWD}
+    # For development, the springboot docker compose dependency runs automatically the docker compose up
+    # Just move the docker compose yml from the publi-connect-infra repo into the backend folder
+    # and use the env file example for running and test it
+    # url: ${DB_URL}
+    # username: ${DB_USER}
+    # password: ${DB_PWD}
     pool:
       max-acquire-time: 30s
       initial-size: 5

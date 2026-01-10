@@ -36,3 +36,4 @@ build/
 #Other
 *.rest
 http_requests
+*.ps1
