@@ -1,4 +1,4 @@
-package com.hotspots.publi_connect.iam.api.dto.device;
+package com.hotspots.publi_connect.iam.app.input;
 
 import com.hotspots.publi_connect.iam.vo.MacAddressVo;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
@@ -6,7 +6,7 @@ import com.hotspots.publi_connect.iam.vo.UUIDVo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateDeviceRequest (
+public record CreateDeviceInput(
 	
 	@NotNull
 	@Valid

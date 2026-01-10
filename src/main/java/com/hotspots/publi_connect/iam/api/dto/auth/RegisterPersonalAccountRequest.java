@@ -3,7 +3,7 @@ package com.hotspots.publi_connect.iam.api.dto.auth;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record RegisterPersonalAccountHttpReq(
+public record RegisterPersonalAccountRequest(
     
     @NotBlank
     String name,

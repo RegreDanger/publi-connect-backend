@@ -1,9 +1,9 @@
-package com.hotspots.publi_connect.iam.api.dto.credential;
+package com.hotspots.publi_connect.iam.app.output;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record CreateCredentialResponse(
+public record CreateCredentialResult(
 
     UUID userId,
 

@@ -4,9 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import com.hotspots.publi_connect.iam.api.dto.account.CreateAccountReq;
-import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountHttpReq;
-import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountReq;
+import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountRequest;
+import com.hotspots.publi_connect.iam.app.input.CreateAccountInput;
+import com.hotspots.publi_connect.iam.app.input.RegisterPersonalAccountInput;
 import com.hotspots.publi_connect.iam.vo.AccountTypeVo;
 import com.hotspots.publi_connect.iam.vo.EmailVo;
 import com.hotspots.publi_connect.iam.vo.PhoneNoVo;
@@ -24,11 +24,11 @@ public interface RegisterPersonalAccountReqMapper {
 	@Mapping(target = "zipCode", source = "zipCode")
 	@Mapping(target = "authProvider", expression = "java(\"basic\")")
 	@Mapping(target = "pwd", source = "pwd")
-	RegisterPersonalAccountReq toValidatedRequest(RegisterPersonalAccountHttpReq plainRequest);
+	RegisterPersonalAccountInput toValidatedRequest(RegisterPersonalAccountRequest plainRequest);
 
 	@Named("toCreateAccountReq")
-	default CreateAccountReq toCreateAccountReq(RegisterPersonalAccountHttpReq plainRequest) {
-		return new CreateAccountReq(
+	default CreateAccountInput toCreateAccountReq(RegisterPersonalAccountRequest plainRequest) {
+		return new CreateAccountInput(
 			new EmailVo(plainRequest.email()),
 			new PhoneNoVo(plainRequest.phoneNo()),
 			new AccountTypeVo(AccountType.PERSONAL.toString()));

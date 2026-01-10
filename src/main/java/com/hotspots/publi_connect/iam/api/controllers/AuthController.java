@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 
-import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountHttpReq;
+import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountRequest;
 import com.hotspots.publi_connect.iam.app.UserAuthService;
 import com.hotspots.publi_connect.kernel.utils.mappers.RegisterPersonalAccountReqMapper;
 
@@ -25,7 +25,7 @@ public class AuthController {
 	private final RegisterPersonalAccountReqMapper registerUserMapper;
 
 	@PostMapping("personal/register")
-	public Mono<Void> register(@Valid @RequestBody Mono<RegisterPersonalAccountHttpReq> request, ServerWebExchange exchange) {
+	public Mono<Void> register(@Valid @RequestBody Mono<RegisterPersonalAccountRequest> request, ServerWebExchange exchange) {
 		return request.flatMap(req -> {
 			ServerHttpResponse response = exchange.getResponse();
 			return authService.registerPersonalAccount(registerUserMapper.toValidatedRequest(req))

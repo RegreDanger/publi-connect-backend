@@ -1,16 +1,15 @@
-package com.hotspots.publi_connect.iam.api.dto.auth;
+package com.hotspots.publi_connect.iam.app.input;
 
-import com.hotspots.publi_connect.iam.api.dto.account.CreateAccountReq;
 import com.hotspots.publi_connect.iam.vo.MacAddressVo;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record RegisterPersonalAccountReq(
+public record RegisterPersonalAccountInput(
 
 	@NotNull @Valid
-	CreateAccountReq createAccountReq,
+	CreateAccountInput createAccountReq,
 	
 	@NotNull @Valid
 	MacAddressVo macAddress,

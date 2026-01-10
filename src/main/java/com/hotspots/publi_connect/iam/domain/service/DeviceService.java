@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.hotspots.publi_connect.iam.api.dto.device.CreateDeviceRequest;
 import com.hotspots.publi_connect.iam.api.dto.device.CreateDeviceResponse;
+import com.hotspots.publi_connect.iam.app.input.CreateDeviceInput;
 import com.hotspots.publi_connect.iam.domain.entity.Device;
 import com.hotspots.publi_connect.iam.repository.DeviceRepository;
 import com.hotspots.publi_connect.iam.vo.DeviceUserIdsVo;
@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
 public class DeviceService {
     private final DeviceRepository repo;
 
-    public Mono<CreateDeviceResponse> createDevice(@Valid CreateDeviceRequest request) {
+    public Mono<CreateDeviceResponse> createDevice(@Valid CreateDeviceInput request) {
         LocalDateTime validUntilDate = LocalDateTime.now().plusHours(1);
         ValidUntilVo validUntilVo = new ValidUntilVo(validUntilDate);
         Device device = new Device(request.userId(), request.macAddress(), validUntilVo, true);

@@ -1,4 +1,4 @@
-package com.hotspots.publi_connect.iam.api.dto.personal_account;
+package com.hotspots.publi_connect.iam.app.input;
 
 import com.hotspots.publi_connect.iam.vo.AgeVo;
 import com.hotspots.publi_connect.iam.vo.AuthProviderVo;
@@ -10,7 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreatePersonalAccountReq(
+public record CreatePersonalAccountInput(
 
 	@NotNull
 	@Valid

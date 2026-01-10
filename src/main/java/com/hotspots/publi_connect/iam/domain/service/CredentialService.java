@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import com.hotspots.publi_connect.iam.api.dto.credential.CreateCredentialRequest;
-import com.hotspots.publi_connect.iam.api.dto.credential.CreateCredentialResponse;
+import com.hotspots.publi_connect.iam.app.output.CreateCredentialResult;
 import com.hotspots.publi_connect.iam.domain.entity.Credential;
 import com.hotspots.publi_connect.iam.repository.CredentialRepository;
 import com.hotspots.publi_connect.iam.vo.StampsVo;
@@ -24,7 +24,7 @@ public class CredentialService {
 	private final CredentialRepository repo;
 	private final PasswordEncoder encoder;
 
-	public Mono<CreateCredentialResponse> createCredential(@Valid CreateCredentialRequest request) {
+	public Mono<CreateCredentialResult> createCredential(@Valid CreateCredentialRequest request) {
 		return Mono.fromCallable(() -> {
 					String hashed = encoder.encode(request.pwd());
 					LocalDateTime createdAt = LocalDateTime.now();
@@ -35,7 +35,7 @@ public class CredentialService {
 				.subscribeOn(Schedulers.boundedElastic())
 					.flatMap(repo::save)
 						.map(saved -> {
-							return new CreateCredentialResponse(saved.getUserId(), saved.getCreatedAt(), saved.getUpdatedAt());
+							return new CreateCredentialResult(saved.getUserId(), saved.getCreatedAt(), saved.getUpdatedAt());
 						});
 	}
 }

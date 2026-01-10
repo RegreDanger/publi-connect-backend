@@ -6,8 +6,8 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountReq;
-import com.hotspots.publi_connect.iam.api.dto.personal_account.CreatePersonalAccountReq;
+import com.hotspots.publi_connect.iam.app.input.CreatePersonalAccountInput;
+import com.hotspots.publi_connect.iam.app.input.RegisterPersonalAccountInput;
 
 @Mapper(componentModel = "spring")
 public interface CreatePersonalAccountReqMapper {
@@ -19,5 +19,5 @@ public interface CreatePersonalAccountReqMapper {
     @Mapping(target = "zipCodeVo", expression = "java(new ZipCodeVo(request.zipCode()))")
     @Mapping(target = "authProviderVo", expression = "java(new AuthProviderVo(request.authProvider()))")
     @Mapping(target = "isActiveVo", expression = "java(true)")
-    CreatePersonalAccountReq toValidatedRequest(@Context RegisterPersonalAccountReq request, UUID accountId);
+    CreatePersonalAccountInput toValidatedRequest(@Context RegisterPersonalAccountInput request, UUID accountId);
 }

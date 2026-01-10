@@ -3,8 +3,8 @@ package com.hotspots.publi_connect.iam.domain.service;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.hotspots.publi_connect.iam.api.dto.personal_account.CreatePersonalAccountReq;
 import com.hotspots.publi_connect.iam.api.dto.personal_account.CreatePersonalAccountRes;
+import com.hotspots.publi_connect.iam.app.input.CreatePersonalAccountInput;
 import com.hotspots.publi_connect.iam.domain.entity.PersonalAccount;
 import com.hotspots.publi_connect.iam.repository.PersonalAccountRepository;
 
@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 public class PersonalAccountService {
 	private final PersonalAccountRepository repo;
 
-	public Mono<CreatePersonalAccountRes> createPersonalAccount(@Valid CreatePersonalAccountReq request) {
+	public Mono<CreatePersonalAccountRes> createPersonalAccount(@Valid CreatePersonalAccountInput request) {
 		PersonalAccount account = new PersonalAccount(request.uuidVo(), request.nameVo(), request.ageVo(), request.genderVo(), request.zipCodeVo(), request.authProviderVo(), request.isActiveVo());
 		return repo.save(account).map(userSaved -> new CreatePersonalAccountRes(userSaved.getAccountId()));
 	}
