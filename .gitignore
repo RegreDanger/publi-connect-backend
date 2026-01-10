@@ -37,3 +37,4 @@ build/
 *.rest
 http_requests
 *.ps1
+docker-compose.yml

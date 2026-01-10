@@ -30,7 +30,7 @@ public class SecurityConfig {
                     .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                     .securityContextRepository(statelessTokenRepository)
                     .authorizeExchange(ex ->
-                        ex.pathMatchers("/public/**", "/auth/login", "/auth/register").permitAll()
+                        ex.pathMatchers("/public/**", "/auth/**").permitAll()
                             .anyExchange().authenticated()
                     )
                     .logout(logout -> logout

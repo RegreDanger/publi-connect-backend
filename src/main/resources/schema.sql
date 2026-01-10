@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS "account" (
-  "account_id" uuid PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
+  "account_id" uuid PRIMARY KEY NOT NULL DEFAULT (gen_random_uuid()),
   "email" varchar(255) UNIQUE NOT NULL,
   "phone_no" varchar(10) UNIQUE,
   "account_type" varchar(10) NOT NULL,
   "created_at" timestamp NOT NULL,
-  "updated_at" timestamp NOT NULL,
+  "updated_at" timestamp NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "personal_account" (
@@ -28,14 +28,14 @@ CREATE TABLE IF NOT EXISTS "company_account" (
 );
 
 CREATE TABLE IF NOT EXISTS "device" (
-  "device_id" uuid PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
+  "device_id" uuid PRIMARY KEY NOT NULL DEFAULT (gen_random_uuid()),
   "account_id" uuid NOT NULL,
   "mac_address" varchar(17) UNIQUE NOT NULL,
   "is_online" bool NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "session" (
-  "session_id" uuid PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
+  "session_id" uuid PRIMARY KEY NOT NULL DEFAULT (gen_random_uuid()),
   "device_id" uuid NOT NULL,
   "refresh_token" varchar(512) NOT NULL,
   "created_at" timestamp NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS "session" (
 );
 
 CREATE TABLE IF NOT EXISTS "credential" (
-  "credential_id" uuid PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
+  "credential_id" uuid PRIMARY KEY NOT NULL DEFAULT (gen_random_uuid()),
   "account_id" uuid UNIQUE NOT NULL,
   "hashed_pwd" varchar(512) NOT NULL,
   "created_at" timestamp NOT NULL,
