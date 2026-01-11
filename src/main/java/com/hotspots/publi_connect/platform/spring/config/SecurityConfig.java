@@ -2,6 +2,7 @@ package com.hotspots.publi_connect.platform.spring.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -30,11 +31,12 @@ public class SecurityConfig {
                     .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                     .securityContextRepository(statelessTokenRepository)
                     .authorizeExchange(ex ->
-                        ex.pathMatchers("/public/**", "/auth/**").permitAll()
+                        ex.pathMatchers("/api/v1/public/**", "/api/v1/auth/**").permitAll()
+                            .pathMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
                             .anyExchange().authenticated()
                     )
                     .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
+                        .logoutUrl("/api/v1/auth/logout")
                         .logoutSuccessHandler((exchange, authentication) -> {
                             exchange.getExchange().getResponse().getCookies().remove("sessionToken");
                             exchange.getExchange().getResponse().getCookies().remove("refreshToken");

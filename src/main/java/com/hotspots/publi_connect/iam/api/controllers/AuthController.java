@@ -17,14 +17,14 @@ import jakarta.validation.Valid;
 import lombok.Data;
 import reactor.core.publisher.Mono;
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/users")
 @Validated
 @Data
 public class AuthController {
 	private final UserAuthService authService;
 	private final RegisterPersonalAccountReqMapper registerUserMapper;
 
-	@PostMapping("personal/register")
+	@PostMapping
 	public Mono<Void> register(@Valid @RequestBody Mono<RegisterPersonalAccountRequest> request, ServerWebExchange exchange) {
 		return request.flatMap(req -> {
 			ServerHttpResponse response = exchange.getResponse();
