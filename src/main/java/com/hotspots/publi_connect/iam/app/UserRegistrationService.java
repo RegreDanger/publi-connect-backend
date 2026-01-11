@@ -7,15 +7,15 @@ import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountRes;
 import com.hotspots.publi_connect.iam.api.dto.credential.CreateCredentialRequest;
 import com.hotspots.publi_connect.iam.api.dto.session.CreateSessionRequest;
 import com.hotspots.publi_connect.iam.app.input.CreateDeviceInput;
-import com.hotspots.publi_connect.iam.app.input.CreatePersonalAccountInput;
-import com.hotspots.publi_connect.iam.app.input.RegisterPersonalAccountInput;
+import com.hotspots.publi_connect.iam.app.input.CreateUserInput;
+import com.hotspots.publi_connect.iam.app.input.RegisterUserInput;
 import com.hotspots.publi_connect.iam.domain.service.AccountService;
 import com.hotspots.publi_connect.iam.domain.service.CredentialService;
 import com.hotspots.publi_connect.iam.domain.service.DeviceService;
-import com.hotspots.publi_connect.iam.domain.service.PersonalAccountService;
+import com.hotspots.publi_connect.iam.domain.service.UserService;
 import com.hotspots.publi_connect.iam.domain.service.SessionService;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
-import com.hotspots.publi_connect.kernel.utils.mappers.CreatePersonalAccountReqMapper;
+import com.hotspots.publi_connect.kernel.utils.mappers.CreateUserInputMapper;
 
 import jakarta.validation.Valid;
 import lombok.Data;
@@ -24,20 +24,20 @@ import reactor.core.publisher.Mono;
 @Service
 @Validated
 @Data
-public class UserAuthService {
+public class UserRegistrationService {
     private final AccountService accountService;
-    private final PersonalAccountService personalAccountService;
+    private final UserService userService;
     private final CredentialService credentialService;
     private final DeviceService deviceService;
     private final SessionService sessionService;
 
-    private final CreatePersonalAccountReqMapper createPersonalAccountReqMapper;
+    private final CreateUserInputMapper createUserInputMapper;
 
-    public Mono<RegisterPersonalAccountRes> registerPersonalAccount(@Valid RegisterPersonalAccountInput request) {
+    public Mono<RegisterPersonalAccountRes> registerUser(@Valid RegisterUserInput request) {
         return accountService.createAccount(request.createAccountReq())
                 .flatMap(accountSaved -> {
-                    CreatePersonalAccountInput req = createPersonalAccountReqMapper.toValidatedRequest(request, accountSaved.accountId());
-                    return personalAccountService.createPersonalAccount(req);
+                    CreateUserInput req = createUserInputMapper.toValidatedInput(request, accountSaved.accountId());
+                    return userService.createUser(req);
                 })
                     .flatMap(userSaved -> {
                             CreateCredentialRequest credentialRequest = new CreateCredentialRequest(new UUIDVo(userSaved.userUuid().toString()), request.pwd());

@@ -4,16 +4,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import com.hotspots.publi_connect.iam.api.dto.auth.RegisterPersonalAccountRequest;
+import com.hotspots.publi_connect.iam.api.dto.auth.RegisterUserRequest;
 import com.hotspots.publi_connect.iam.app.input.CreateAccountInput;
-import com.hotspots.publi_connect.iam.app.input.RegisterPersonalAccountInput;
+import com.hotspots.publi_connect.iam.app.input.RegisterUserInput;
 import com.hotspots.publi_connect.iam.vo.AccountTypeVo;
 import com.hotspots.publi_connect.iam.vo.EmailVo;
 import com.hotspots.publi_connect.iam.vo.PhoneNoVo;
 import com.hotspots.publi_connect.kernel.utils.enums.AccountType;
 
 @Mapper(componentModel = "spring")
-public interface RegisterPersonalAccountReqMapper {
+public interface RegisterUserRequestMapper {
 
 	@Mapping(target = "createAccountReq", source = ".", qualifiedByName = "toCreateAccountReq")
 	@Mapping(target = "macAddress", expression = "java(new MacAddressVo(plainRequest.macAddress()))")
@@ -24,13 +24,13 @@ public interface RegisterPersonalAccountReqMapper {
 	@Mapping(target = "zipCode", source = "zipCode")
 	@Mapping(target = "authProvider", expression = "java(\"basic\")")
 	@Mapping(target = "pwd", source = "pwd")
-	RegisterPersonalAccountInput toValidatedRequest(RegisterPersonalAccountRequest plainRequest);
+	RegisterUserInput toValidatedRequest(RegisterUserRequest plainRequest);
 
 	@Named("toCreateAccountReq")
-	default CreateAccountInput toCreateAccountReq(RegisterPersonalAccountRequest plainRequest) {
+	default CreateAccountInput toCreateAccountReq(RegisterUserRequest plainRequest) {
 		return new CreateAccountInput(
 			new EmailVo(plainRequest.email()),
 			new PhoneNoVo(plainRequest.phoneNo()),
-			new AccountTypeVo(AccountType.PERSONAL.toString()));
+			new AccountTypeVo(AccountType.USER.toString()));
 	}
 }

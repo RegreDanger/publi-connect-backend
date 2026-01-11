@@ -19,7 +19,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Getter
-@Table("device")
+@Table("devices")
 /* Just for reading on DB */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Device {

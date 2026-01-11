@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Getter
-@Table("credential")
+@Table("credentials")
 /* Just for reading on DB */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Credential {

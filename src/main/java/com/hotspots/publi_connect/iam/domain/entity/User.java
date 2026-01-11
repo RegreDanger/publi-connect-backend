@@ -23,10 +23,10 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Getter
-@Table("personal_account")
+@Table("users")
 /* Just for reading on DB */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class PersonalAccount implements Persistable<UUID> {
+public class User implements Persistable<UUID> {
 
 	@Id
 	private UUID accountId;
@@ -41,7 +41,7 @@ public class PersonalAccount implements Persistable<UUID> {
 	@Transient
 	private boolean isNew;
 
-	public PersonalAccount(UUIDVo accountIdVo, String name, AgeVo age, GenderVo gender, ZipCodeVo zipCode, AuthProviderVo authProvider, boolean isActive) {
+	public User(UUIDVo accountIdVo, String name, AgeVo age, GenderVo gender, ZipCodeVo zipCode, AuthProviderVo authProvider, boolean isActive) {
 		this.accountId = UUID.fromString(accountIdVo.id());
 		this.name = name;
 		this.age = age.age();

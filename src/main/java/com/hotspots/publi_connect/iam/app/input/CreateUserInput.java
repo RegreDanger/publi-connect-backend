@@ -10,14 +10,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreatePersonalAccountInput(
+public record CreateUserInput(
 
 	@NotNull
 	@Valid
 	UUIDVo uuidVo,
 
 	@NotBlank
-	String nameVo,
+	String name,
 	
 	@NotNull
 	@Valid

@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum AccountType {
-    COMPANY("COMPANY"),
-    PERSONAL("PERSONAL");
+    ENTERPRISE("ENTERPRISE"),
+    USER("USER");
 
     private final String type;
 

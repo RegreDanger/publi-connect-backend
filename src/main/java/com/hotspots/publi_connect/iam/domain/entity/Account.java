@@ -20,7 +20,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Getter
-@Table("account")
+@Table("accounts")
 /* Just for reading on DB */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Account {

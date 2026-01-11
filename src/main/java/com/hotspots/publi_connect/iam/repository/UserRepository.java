@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 
-import com.hotspots.publi_connect.iam.domain.entity.PersonalAccount;
+import com.hotspots.publi_connect.iam.domain.entity.User;
 
 @Repository
-public interface PersonalAccountRepository extends R2dbcRepository<PersonalAccount, UUID> {}
+public interface UserRepository extends R2dbcRepository<User, UUID> {}
