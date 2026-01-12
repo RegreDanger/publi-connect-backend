@@ -3,13 +3,13 @@ package com.hotspots.publi_connect.iam.vo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-public record DeviceUserIdsVo(
+public record DeviceAccountIdsVo(
     
     @NotNull
     @Valid
-    UUIDVo deviceId,
+    UUIDVo deviceIdVo,
 
     @NotNull
     @Valid
-    UUIDVo userId
+    UUIDVo accountIdVo
 ) {}

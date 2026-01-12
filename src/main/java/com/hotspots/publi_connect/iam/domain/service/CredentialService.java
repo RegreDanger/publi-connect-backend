@@ -26,16 +26,16 @@ public class CredentialService {
 	private final CredentialRepository repo;
 	private final PasswordEncoder encoder;
 
-	public Mono<CreateCredentialResult> createCredential(@NotNull @Valid UUIDVo userId, @NotBlank String pwd) {
+	public Mono<CreateCredentialResult> createCredential(@NotNull @Valid UUIDVo accountIdVo, @NotBlank String pwd) {
 		return Mono.fromCallable(() -> {
 					String hashed = encoder.encode(pwd);
 					LocalDateTime createdAt = LocalDateTime.now();
 					LocalDateTime updatedAt = LocalDateTime.now();
 					StampsVo stamps = new StampsVo(createdAt, updatedAt);
-					return new Credential(userId, hashed, stamps);
+					return new Credential(accountIdVo, hashed, stamps);
 				})
 				.subscribeOn(Schedulers.boundedElastic())
 					.flatMap(repo::save)
-						.map(saved -> new CreateCredentialResult(saved.getUserId(), saved.getCreatedAt(), saved.getUpdatedAt()));
+						.map(saved -> new CreateCredentialResult(saved.getAccountId(), saved.getCreatedAt(), saved.getUpdatedAt()));
 	}
 }

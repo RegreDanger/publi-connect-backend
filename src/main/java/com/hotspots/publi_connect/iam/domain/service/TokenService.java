@@ -23,18 +23,18 @@ public class TokenService {
         this.jwtProperties = jwtProperties;
     }
 
-    public String generateSessionToken(UUIDVo deviceId, UUIDVo userId) {
-        return generateToken(UUID.fromString(deviceId.id()), UUID.fromString(userId.id()), jwtProperties.getExpiration().getTime());
+    public String generateSessionToken(UUIDVo deviceIdVo, UUIDVo accountIdVo) {
+        return generateToken(UUID.fromString(deviceIdVo.id()), UUID.fromString(accountIdVo.id()), jwtProperties.getExpiration().getTime());
     }
 
-    public String generateRefreshToken(UUIDVo deviceId, UUIDVo userId) {
-        return generateToken(UUID.fromString(deviceId.id()), UUID.fromString(userId.id()), jwtProperties.getRefreshTime());
+    public String generateRefreshToken(UUIDVo deviceIdVo, UUIDVo accountId) {
+        return generateToken(UUID.fromString(deviceIdVo.id()), UUID.fromString(accountId.id()), jwtProperties.getRefreshTime());
     }
 
-    private String generateToken(UUID deviceId, UUID userId, long expirationMs) {
+    private String generateToken(UUID deviceIdVo, UUID accountId, long expirationMs) {
         return Jwts.builder()
-                .subject(userId.toString())
-                .claim("device_id", deviceId)
+                .subject(accountId.toString())
+                .claim("device_id", deviceIdVo)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(Keys.hmacShaKeyFor(jwtProperties.getSecret().getKey().getBytes()))

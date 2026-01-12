@@ -12,7 +12,7 @@ public record RegisterUserInput(
 	CreateAccountInput createAccountInput,
 	
 	@NotNull @Valid
-	MacAddressVo macAddress,
+	MacAddressVo macAddressVo,
 
 	@NotBlank
 	String name,

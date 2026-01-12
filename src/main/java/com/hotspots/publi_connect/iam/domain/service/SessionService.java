@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import com.hotspots.publi_connect.iam.app.output.CreateSessionResult;
 import com.hotspots.publi_connect.iam.domain.entity.Session;
 import com.hotspots.publi_connect.iam.repository.SessionRepository;
-import com.hotspots.publi_connect.iam.vo.DeviceUserIdsVo;
+import com.hotspots.publi_connect.iam.vo.DeviceAccountIdsVo;
 import com.hotspots.publi_connect.iam.vo.RefreshTokenVo;
 import com.hotspots.publi_connect.iam.vo.SessionStampsVo;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
@@ -27,12 +27,12 @@ public class SessionService {
 	private final TokenService jwt;
 	private final JwtConfig jwtConfig;
 
-	public Mono<CreateSessionResult> createSession(@Valid DeviceUserIdsVo deviceUserIdsVo) {
-		UUIDVo userId = deviceUserIdsVo.userId();
-		UUIDVo deviceId = deviceUserIdsVo.deviceId();
+	public Mono<CreateSessionResult> createSession(@Valid DeviceAccountIdsVo deviceAccountIdsVo) {
+		UUIDVo accountId = deviceAccountIdsVo.accountIdVo();
+		UUIDVo deviceId = deviceAccountIdsVo.deviceIdVo();
 		
-		String refreshToken = jwt.generateRefreshToken(deviceId, userId);
-		String sessionToken = jwt.generateSessionToken(deviceId, userId);
+		String refreshToken = jwt.generateRefreshToken(deviceId, accountId);
+		String sessionToken = jwt.generateSessionToken(deviceId, accountId);
 		
 		SessionStampsVo stamps = new SessionStampsVo(LocalDateTime.now(),LocalDateTime.now().plusMonths(1));
 		

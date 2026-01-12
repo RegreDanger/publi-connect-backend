@@ -12,7 +12,7 @@ import com.hotspots.publi_connect.iam.app.input.RegisterUserInput;
 @Mapper(componentModel = "spring")
 public interface CreateUserInputMapper {
     
-    @Mapping(target = "uuidVo", expression = "java(new UUIDVo(accountId.toString()))")
+    @Mapping(target = "accountIdVo", expression = "java(new UUIDVo(accountId.toString()))")
     @Mapping(target = "name", expression = "java(input.name())")
     @Mapping(target = "ageVo", expression = "java(new AgeVo(input.age()))")
     @Mapping(target = "genderVo", expression = "java(new GenderVo(input.gender()))")

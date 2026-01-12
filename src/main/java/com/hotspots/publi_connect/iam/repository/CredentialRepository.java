@@ -11,5 +11,5 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface CredentialRepository extends R2dbcRepository<Credential, UUID> {
-    public Mono<Credential> findByUserId(UUID userId);
+    public Mono<Credential> findByAccountId(UUID accountId);
 }

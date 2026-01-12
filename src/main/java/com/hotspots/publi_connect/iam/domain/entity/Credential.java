@@ -25,13 +25,13 @@ public class Credential {
     
     @Id
     private UUID credentialId;
-    private UUID userId;
+    private UUID accountId;
     private String hashedPwd;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Credential(UUIDVo userId, String hashedPwd, StampsVo stamps) {
-        this.userId = UUID.fromString(userId.id());
+    public Credential(UUIDVo accountIdVo, String hashedPwd, StampsVo stamps) {
+        this.accountId = UUID.fromString(accountIdVo.id());
         this.hashedPwd = hashedPwd;
         this.createdAt = stamps.createdAt();
         this.updatedAt = stamps.updatedAt();
