@@ -15,7 +15,7 @@ import com.hotspots.publi_connect.kernel.utils.enums.AccountType;
 @Mapper(componentModel = "spring")
 public interface RegisterUserRequestMapper {
 
-	@Mapping(target = "createAccountReq", source = ".", qualifiedByName = "toCreateAccountReq")
+	@Mapping(target = "createAccountInput", source = ".", qualifiedByName = "toCreateAccountReq")
 	@Mapping(target = "macAddress", expression = "java(new MacAddressVo(plainRequest.macAddress()))")
 	
 	@Mapping(target = "name", source = "name")

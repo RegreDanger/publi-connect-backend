@@ -29,9 +29,9 @@ public class UserController {
 		return request.flatMap(req -> {
 			ServerHttpResponse response = exchange.getResponse();
 			return userRegistrationService.registerUser(registerUserRequestMapper.toValidatedRequest(req))
-				.flatMap(userSaved -> {
-					response.addCookie(userSaved.responseCookies().sessionCookie());
-					response.addCookie(userSaved.responseCookies().refreshCookie());
+				.flatMap(responseCookies -> {
+					response.addCookie(responseCookies.sessionCookie());
+					response.addCookie(responseCookies.refreshCookie());
 					response.setStatusCode(HttpStatus.NO_CONTENT);
 					return response.setComplete();
 				});

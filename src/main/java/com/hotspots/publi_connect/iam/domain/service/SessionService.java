@@ -6,12 +6,11 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.hotspots.publi_connect.iam.api.dto.session.CreateSessionRequest;
-import com.hotspots.publi_connect.iam.api.dto.session.CreateSessionResponse;
+import com.hotspots.publi_connect.iam.app.output.CreateSessionResult;
 import com.hotspots.publi_connect.iam.domain.entity.Session;
 import com.hotspots.publi_connect.iam.repository.SessionRepository;
+import com.hotspots.publi_connect.iam.vo.DeviceUserIdsVo;
 import com.hotspots.publi_connect.iam.vo.RefreshTokenVo;
-import com.hotspots.publi_connect.iam.vo.ResponseCookies;
 import com.hotspots.publi_connect.iam.vo.SessionStampsVo;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
 import com.hotspots.publi_connect.platform.spring.config.JwtConfig;
@@ -28,9 +27,9 @@ public class SessionService {
 	private final TokenService jwt;
 	private final JwtConfig jwtConfig;
 
-	public Mono<CreateSessionResponse> createSession(@Valid CreateSessionRequest request) {
-		UUIDVo userId = request.deviceUserIdsVo().userId();
-		UUIDVo deviceId = request.deviceUserIdsVo().deviceId();
+	public Mono<CreateSessionResult> createSession(@Valid DeviceUserIdsVo deviceUserIdsVo) {
+		UUIDVo userId = deviceUserIdsVo.userId();
+		UUIDVo deviceId = deviceUserIdsVo.deviceId();
 		
 		String refreshToken = jwt.generateRefreshToken(deviceId, userId);
 		String sessionToken = jwt.generateSessionToken(deviceId, userId);
@@ -40,13 +39,10 @@ public class SessionService {
 		RefreshTokenVo refreshVo = new RefreshTokenVo(refreshToken);
 		
 		Session session = new Session(deviceId, refreshVo, stamps);
-		return repo.save(session).map(sessionSaved -> {
-			ResponseCookies responseCookies = buildCookies(sessionToken, refreshToken, jwtConfig.getExpiration().getTime(), jwtConfig.getRefreshTime());
-			return new CreateSessionResponse(responseCookies);
-		});
+		return repo.save(session).map(sessionSaved -> buildCookies(sessionToken, refreshToken, jwtConfig.getExpiration().getTime(), jwtConfig.getRefreshTime()));
 	}
 
-	private ResponseCookies buildCookies(String sessionToken, String refreshToken, long expirationTime, long refreshTime) {
+	private CreateSessionResult buildCookies(String sessionToken, String refreshToken, long expirationTime, long refreshTime) {
 		ResponseCookie sessionCookie = ResponseCookie
 											.from("session_token", sessionToken)
 											.httpOnly(true)
@@ -63,7 +59,7 @@ public class SessionService {
 											.maxAge(refreshTime/1000)
 											.sameSite("Strict")
 											.build();
-		return new ResponseCookies(sessionCookie, refreshCookie);
+		return new CreateSessionResult(sessionCookie, refreshCookie);
 	}
 
 }

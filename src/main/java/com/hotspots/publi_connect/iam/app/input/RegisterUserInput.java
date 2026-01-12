@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 public record RegisterUserInput(
 
 	@NotNull @Valid
-	CreateAccountInput createAccountReq,
+	CreateAccountInput createAccountInput,
 	
 	@NotNull @Valid
 	MacAddressVo macAddress,
