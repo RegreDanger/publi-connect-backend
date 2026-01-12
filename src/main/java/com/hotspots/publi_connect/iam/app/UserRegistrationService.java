@@ -33,15 +33,15 @@ public class UserRegistrationService {
 
     public Mono<CreateSessionResult> registerUser(@Valid RegisterUserInput request) {
         return accountService.createAccount(request.createAccountInput())
-                .flatMap(idAccountSaved -> {
-                    CreateUserInput req = createUserInputMapper.toValidatedInput(request, idAccountSaved);
+                .flatMap(accountIdSaved -> {
+                    CreateUserInput req = createUserInputMapper.toValidatedInput(request, accountIdSaved);
                     return userService.createUser(req);
                 })
-                    .flatMap(idUserSaved ->
-                             credentialService.createCredential(new UUIDVo(idUserSaved.toString()), request.pwd())
+                    .flatMap(accountIdSaved ->
+                             credentialService.createCredential(new UUIDVo(accountIdSaved.toString()), request.pwd())
                         )
                             .flatMap(credentialSaved -> {
-                                CreateDeviceInput deviceRequest = new CreateDeviceInput(new UUIDVo(credentialSaved.userId().toString()), request.macAddress());
+                                CreateDeviceInput deviceRequest = new CreateDeviceInput(new UUIDVo(credentialSaved.accountId().toString()), request.macAddressVo());
                                 return deviceService.createDevice(deviceRequest);
                             })
                                 .flatMap(sessionService::createSession);

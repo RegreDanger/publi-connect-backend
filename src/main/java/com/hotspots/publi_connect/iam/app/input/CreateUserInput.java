@@ -14,7 +14,7 @@ public record CreateUserInput(
 
 	@NotNull
 	@Valid
-	UUIDVo uuidVo,
+	UUIDVo accountIdVo,
 
 	@NotBlank
 	String name,

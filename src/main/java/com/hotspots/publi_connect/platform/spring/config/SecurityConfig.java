@@ -31,12 +31,12 @@ public class SecurityConfig {
                     .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                     .securityContextRepository(statelessTokenRepository)
                     .authorizeExchange(ex ->
-                        ex.pathMatchers("/api/v1/public/**", "/api/v1/auth/**").permitAll()
-                            .pathMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                        ex.pathMatchers("/public/**", "/auth/**").permitAll()
+                            .pathMatchers(HttpMethod.POST, "/users").permitAll()
                             .anyExchange().authenticated()
                     )
                     .logout(logout -> logout
-                        .logoutUrl("/api/v1/auth/logout")
+                        .logoutUrl("/auth/logout")
                         .logoutSuccessHandler((exchange, authentication) -> {
                             exchange.getExchange().getResponse().getCookies().remove("sessionToken");
                             exchange.getExchange().getResponse().getCookies().remove("refreshToken");

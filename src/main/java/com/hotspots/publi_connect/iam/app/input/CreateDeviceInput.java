@@ -10,10 +10,10 @@ public record CreateDeviceInput(
 	
 	@NotNull
 	@Valid
-	UUIDVo userId,
+	UUIDVo accountIdVo,
 	
 	@NotNull
 	@Valid
-    MacAddressVo macAddress
+    MacAddressVo macAddressVo
 
 ) {}

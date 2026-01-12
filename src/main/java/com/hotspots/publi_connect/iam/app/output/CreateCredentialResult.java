@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public record CreateCredentialResult(
 
-    UUID userId,
+    UUID accountId,
 
     LocalDateTime createdeAt,
     
