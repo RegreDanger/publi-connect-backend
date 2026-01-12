@@ -1,8 +1,8 @@
-package com.hotspots.publi_connect.iam.vo;
+package com.hotspots.publi_connect.iam.app.output;
 
 import org.springframework.http.ResponseCookie;
 
-public record ResponseCookies(
+public record CreateSessionResult(
     ResponseCookie sessionCookie,
     ResponseCookie refreshCookie
 ){}
