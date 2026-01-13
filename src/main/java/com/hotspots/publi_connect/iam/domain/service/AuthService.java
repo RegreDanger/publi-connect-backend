@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import com.hotspots.publi_connect.iam.app.output.CreateSessionResult;
-import com.hotspots.publi_connect.iam.vo.DeviceAccountIdsVo;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
 import com.hotspots.publi_connect.platform.spring.config.JwtConfig;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import reactor.core.publisher.Mono;
 
@@ -20,14 +20,11 @@ public class AuthService {
 	private final TokenService jwt;
 	private final JwtConfig jwtConfig;
 
-	public Mono<CreateSessionResult> createSession(@Valid DeviceAccountIdsVo deviceAccountIdsVo) {
+	public Mono<CreateSessionResult> createSession(@NotNull @Valid UUIDVo accountIdVo) {
 
-		return Mono.just(deviceAccountIdsVo).map(deviceAccountIdsVoMapping -> {
-			UUIDVo accountId = deviceAccountIdsVoMapping.accountIdVo();
-			UUIDVo deviceId = deviceAccountIdsVoMapping.deviceIdVo();
-			
-			String refreshToken = jwt.generateRefreshToken(deviceId, accountId);
-			String sessionToken = jwt.generateSessionToken(deviceId, accountId);
+		return Mono.just(accountIdVo).map(accountIdVoMapping -> {
+			String refreshToken = jwt.generateRefreshToken(accountIdVoMapping);
+			String sessionToken = jwt.generateSessionToken(accountIdVoMapping);
 			return buildCookies(sessionToken, refreshToken, jwtConfig.getExpiration().getTime(), jwtConfig.getRefreshTime());
 		});
 	}
