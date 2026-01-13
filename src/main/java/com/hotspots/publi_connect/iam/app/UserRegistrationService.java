@@ -8,9 +8,9 @@ import com.hotspots.publi_connect.iam.app.input.CreateUserInput;
 import com.hotspots.publi_connect.iam.app.input.RegisterUserInput;
 import com.hotspots.publi_connect.iam.app.output.CreateSessionResult;
 import com.hotspots.publi_connect.iam.domain.service.AccountService;
+import com.hotspots.publi_connect.iam.domain.service.AuthService;
 import com.hotspots.publi_connect.iam.domain.service.CredentialService;
 import com.hotspots.publi_connect.iam.domain.service.DeviceService;
-import com.hotspots.publi_connect.iam.domain.service.SessionService;
 import com.hotspots.publi_connect.iam.domain.service.UserService;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
 import com.hotspots.publi_connect.kernel.utils.mappers.CreateAccountInputMapper;
@@ -28,7 +28,7 @@ public class UserRegistrationService {
     private final UserService userService;
     private final CredentialService credentialService;
     private final DeviceService deviceService;
-    private final SessionService sessionService;
+    private final AuthService authService;
 
     private final CreateUserInputMapper createUserInputMapper;
     private final CreateAccountInputMapper createAccountInputMapper;
@@ -46,7 +46,7 @@ public class UserRegistrationService {
                                 CreateDeviceInput deviceRequest = new CreateDeviceInput(new UUIDVo(credentialSaved.accountId().toString()), request.macAddressVo());
                                 return deviceService.createDevice(deviceRequest);
                             })
-                                .flatMap(sessionService::createSession);
+                                .flatMap(authService::createSession);
     }
 
 }
