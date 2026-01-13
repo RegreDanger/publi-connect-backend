@@ -3,14 +3,15 @@ package com.hotspots.publi_connect.iam.domain.service;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.stereotype.Component;
 
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
 import com.hotspots.publi_connect.platform.spring.config.JwtConfig;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -18,23 +19,26 @@ import io.jsonwebtoken.security.Keys;
 public class TokenService {
 
     private final JwtConfig jwtProperties;
+    private final SecretKey key;
+    private final JwtParser parser;
 
     public TokenService(JwtConfig jwtProperties) {
         this.jwtProperties = jwtProperties;
+        this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getKey().getBytes());
+        this.parser = Jwts.parser().verifyWith(this.key).build();
     }
 
-    public String generateSessionToken(UUIDVo deviceIdVo, UUIDVo accountIdVo) {
-        return generateToken(UUID.fromString(deviceIdVo.id()), UUID.fromString(accountIdVo.id()), jwtProperties.getExpiration().getTime());
+    public String generateSessionToken(UUIDVo accountIdVo) {
+        return generateToken(UUID.fromString(accountIdVo.id()), jwtProperties.getExpiration().getTime());
     }
 
-    public String generateRefreshToken(UUIDVo deviceIdVo, UUIDVo accountId) {
-        return generateToken(UUID.fromString(deviceIdVo.id()), UUID.fromString(accountId.id()), jwtProperties.getRefreshTime());
+    public String generateRefreshToken(UUIDVo accountId) {
+        return generateToken(UUID.fromString(accountId.id()), jwtProperties.getRefreshTime());
     }
 
-    private String generateToken(UUID deviceIdVo, UUID accountId, long expirationMs) {
+    private String generateToken(UUID accountId, long expirationMs) {
         return Jwts.builder()
                 .subject(accountId.toString())
-                .claim("device_id", deviceIdVo)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(Keys.hmacShaKeyFor(jwtProperties.getSecret().getKey().getBytes()))
@@ -43,17 +47,18 @@ public class TokenService {
 
     public boolean isTokenValid(String token) {
         try {
-            Jws<Claims> claims = Jwts.parser()
-                                     .verifyWith(Keys.hmacShaKeyFor(jwtProperties.getSecret().getKey().getBytes()))
-                                     .build()
-                                     .parseSignedClaims(token);
-
-            Date expiration = claims.getPayload().getExpiration();
+            Date expiration = parser.parseSignedClaims(token)
+                                        .getPayload()
+                                        .getExpiration();
             return expiration.after(new Date());
 
         } catch (JwtException e) {
             return false;
-        } 
+        }
+    }
+
+    public String extractSubject(String token) {
+        return parser.parseSignedClaims(token).getPayload().getSubject();
     }
 
 }
