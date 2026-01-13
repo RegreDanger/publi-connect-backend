@@ -1,6 +1,13 @@
 package com.hotspots.publi_connect.iam.app.input;
 
+import com.hotspots.publi_connect.iam.vo.AccountTypeVo;
+import com.hotspots.publi_connect.iam.vo.AgeVo;
+import com.hotspots.publi_connect.iam.vo.AuthProviderVo;
+import com.hotspots.publi_connect.iam.vo.EmailVo;
+import com.hotspots.publi_connect.iam.vo.GenderVo;
 import com.hotspots.publi_connect.iam.vo.MacAddressVo;
+import com.hotspots.publi_connect.iam.vo.PhoneNoVo;
+import com.hotspots.publi_connect.iam.vo.ZipCodeVo;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -8,27 +15,44 @@ import jakarta.validation.constraints.NotNull;
 
 public record RegisterUserInput(
 
-	@NotNull @Valid
-	CreateAccountInput createAccountInput,
-	
-	@NotNull @Valid
-	MacAddressVo macAddressVo,
-
 	@NotBlank
 	String name,
 
 	@NotNull
-	Integer age,
+	@Valid
+	AgeVo ageVo,
 
-	@NotBlank
-	String gender,
+	@NotNull
+	@Valid
+	GenderVo genderVo,
 
-	@NotBlank
-	String zipCode,
+	@NotNull
+	@Valid
+	ZipCodeVo zipCodeVo,
 
-	@NotBlank
-	String authProvider,
+	@NotNull
+	@Valid
+	AuthProviderVo authProviderVo,
 	
 	@NotBlank
-	String pwd
+	String pwd,
+
+	//These parameters are for the CreateAccountInput class
+
+	@NotNull
+	@Valid
+	MacAddressVo macAddressVo,
+
+	@NotNull
+	@Valid
+	EmailVo emailVo,
+	
+	@NotNull
+	@Valid
+	PhoneNoVo phoneNoVo,
+
+	@NotNull
+	@Valid
+	AccountTypeVo accountTypeVo
+
 ) {}

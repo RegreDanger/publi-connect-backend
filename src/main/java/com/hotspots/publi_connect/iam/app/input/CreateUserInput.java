@@ -36,6 +36,6 @@ public record CreateUserInput(
 	AuthProviderVo authProviderVo,
 
 	@NotNull
-	Boolean isActiveVo
+	Boolean isOnline
 	
 ){}
