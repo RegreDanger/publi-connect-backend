@@ -13,6 +13,7 @@ import com.hotspots.publi_connect.iam.domain.service.DeviceService;
 import com.hotspots.publi_connect.iam.domain.service.SessionService;
 import com.hotspots.publi_connect.iam.domain.service.UserService;
 import com.hotspots.publi_connect.iam.vo.UUIDVo;
+import com.hotspots.publi_connect.kernel.utils.mappers.CreateAccountInputMapper;
 import com.hotspots.publi_connect.kernel.utils.mappers.CreateUserInputMapper;
 
 import jakarta.validation.Valid;
@@ -30,9 +31,10 @@ public class UserRegistrationService {
     private final SessionService sessionService;
 
     private final CreateUserInputMapper createUserInputMapper;
+    private final CreateAccountInputMapper createAccountInputMapper;
 
     public Mono<CreateSessionResult> registerUser(@Valid RegisterUserInput request) {
-        return accountService.createAccount(request.createAccountInput())
+        return accountService.createAccount(createAccountInputMapper.toCreateAccountInput(request))
                 .flatMap(accountIdSaved -> {
                     CreateUserInput req = createUserInputMapper.toValidatedInput(request, accountIdSaved);
                     return userService.createUser(req);

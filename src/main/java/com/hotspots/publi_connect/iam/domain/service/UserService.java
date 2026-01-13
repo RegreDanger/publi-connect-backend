@@ -20,7 +20,7 @@ public class UserService {
 	private final UserRepository repo;
 
 	public Mono<UUID> createUser(@Valid CreateUserInput request) {
-		User user = new User(request.accountIdVo(), request.name(), request.ageVo(), request.genderVo(), request.zipCodeVo(), request.authProviderVo(), request.isActiveVo());
+		User user = new User(request.accountIdVo(), request.name(), request.ageVo(), request.genderVo(), request.zipCodeVo(), request.authProviderVo(), request.isOnline());
 		return repo.save(user).map(User::getAccountId);
 	}
 
