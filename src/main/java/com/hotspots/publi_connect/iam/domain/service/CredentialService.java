@@ -1,10 +1,13 @@
 package com.hotspots.publi_connect.iam.domain.service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.hotspots.publi_connect.iam.app.output.CreateCredentialResult;
 import com.hotspots.publi_connect.iam.domain.entity.Credential;
@@ -38,4 +41,12 @@ public class CredentialService {
 					.flatMap(repo::save)
 						.map(saved -> new CreateCredentialResult(saved.getAccountId(), saved.getCreatedAt(), saved.getUpdatedAt()));
 	}
+
+	public Mono<UUIDVo> authenticate(@NotNull @Valid UUIDVo accountId, String rawPwd) {
+		return repo.findByAccountId(UUID.fromString(accountId.id()))
+					.filter(credential -> encoder.matches(rawPwd, credential.getHashedPwd()))
+					.switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales Inválidas")))
+					.map(credential -> accountId);
+	}
+
 }
