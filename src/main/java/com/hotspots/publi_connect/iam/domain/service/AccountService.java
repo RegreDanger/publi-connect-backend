@@ -13,6 +13,7 @@ import com.hotspots.publi_connect.iam.domain.entity.Account;
 import com.hotspots.publi_connect.iam.repository.AccountRepository;
 import com.hotspots.publi_connect.iam.vo.EmailVo;
 import com.hotspots.publi_connect.iam.vo.StampsVo;
+import com.hotspots.publi_connect.iam.vo.UUIDVo;
 
 import jakarta.validation.Valid;
 import lombok.Data;
@@ -38,6 +39,12 @@ public class AccountService {
     
     public Mono<Boolean> accountExists(@Valid EmailVo emailVo) {
         return repo.existsByEmail(emailVo.email());
-    } 
+    }
+
+    public Mono<UUIDVo> findAccountByEmail(@Valid EmailVo emailVo) {
+        return repo.findByEmail(emailVo.email())
+                .map(account -> new UUIDVo(account.getAccountId().toString()));
+                
+    }
 
 }
