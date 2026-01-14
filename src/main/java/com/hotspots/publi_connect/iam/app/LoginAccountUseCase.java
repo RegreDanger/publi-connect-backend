@@ -26,8 +26,9 @@ public class LoginAccountUseCase {
     public Mono<CreateSessionResult> loginAccount(@Validated LoginAccountInput input) {
         return accountService.findAccountByEmail(input.emailVo())
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales Inválidas")))
-                .flatMap(accountFoundIdVo -> 
+                .flatMap(accountFoundIdVo ->
                     credentialService.authenticate(accountFoundIdVo, input.pwd())
+                        .thenReturn(accountFoundIdVo)
                 )
                 .flatMap(authService::createSession);
     }

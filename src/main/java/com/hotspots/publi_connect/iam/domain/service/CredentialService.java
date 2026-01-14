@@ -42,11 +42,11 @@ public class CredentialService {
 						.map(saved -> new CreateCredentialResult(saved.getAccountId(), saved.getCreatedAt(), saved.getUpdatedAt()));
 	}
 
-	public Mono<UUIDVo> authenticate(@NotNull @Valid UUIDVo accountId, String rawPwd) {
+	public Mono<Void> authenticate(@NotNull @Valid UUIDVo accountId, String rawPwd) {
 		return repo.findByAccountId(UUID.fromString(accountId.id()))
 					.filter(credential -> encoder.matches(rawPwd, credential.getHashedPwd()))
 					.switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales Inválidas")))
-					.map(credential -> accountId);
+					.then();
 	}
 
 }
