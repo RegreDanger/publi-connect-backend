@@ -36,7 +36,7 @@ public class AuthService {
 											.secure(true)
 											.path("/")
 											.maxAge(expirationTime/1000)
-											.sameSite("Strict")
+											.sameSite("None")
 											.build();
 		ResponseCookie refreshCookie = ResponseCookie
 											.from("refresh_token", refreshToken)
@@ -44,7 +44,7 @@ public class AuthService {
 											.secure(true)
 											.path("/")
 											.maxAge(refreshTime/1000)
-											.sameSite("Strict")
+											.sameSite("None")
 											.build();
 		return new CreateSessionResult(sessionCookie, refreshCookie);
 	}

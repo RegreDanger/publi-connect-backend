@@ -27,3 +27,5 @@ jwt:
     time: 86400000
   refresh:
     time: 25920000000
+cors:
+  allowed-origins: ${FRONT_ORIGIN}
