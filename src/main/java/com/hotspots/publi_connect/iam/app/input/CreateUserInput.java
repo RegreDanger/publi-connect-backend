@@ -14,7 +14,7 @@ public record CreateUserInput(
 
 	@NotNull
 	@Valid
-	UUIDVo uuidVo,
+	UUIDVo accountIdVo,
 
 	@NotBlank
 	String name,
@@ -36,6 +36,6 @@ public record CreateUserInput(
 	AuthProviderVo authProviderVo,
 
 	@NotNull
-	Boolean isActiveVo
+	Boolean isOnline
 	
 ){}

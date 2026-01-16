@@ -12,4 +12,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface AccountRepository extends R2dbcRepository<Account, UUID> {
     public Mono<Boolean> existsByEmail(String email);
+
+    public Mono<Account> findByEmail(String email);
 }

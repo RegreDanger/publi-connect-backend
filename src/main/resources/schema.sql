@@ -34,14 +34,6 @@ CREATE TABLE IF NOT EXISTS "devices" (
   "is_online" bool NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "sessions" (
-  "session_id" uuid PRIMARY KEY NOT NULL DEFAULT (gen_random_uuid()),
-  "device_id" uuid NOT NULL,
-  "refresh_token" varchar(512) NOT NULL,
-  "created_at" timestamp NOT NULL,
-  "expires_at" timestamp NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS "credentials" (
   "credential_id" uuid PRIMARY KEY NOT NULL DEFAULT (gen_random_uuid()),
   "account_id" uuid UNIQUE NOT NULL,
@@ -57,7 +49,5 @@ ALTER TABLE "users" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("accou
 ALTER TABLE "enterprises" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("account_id");
 
 ALTER TABLE "devices" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("account_id");
-
-ALTER TABLE "sessions" ADD FOREIGN KEY ("device_id") REFERENCES "devices" ("device_id");
 
 ALTER TABLE "credentials" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("account_id");

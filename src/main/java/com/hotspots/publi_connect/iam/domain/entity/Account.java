@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Table;
 
 import com.hotspots.publi_connect.iam.vo.AccountTypeVo;
@@ -22,19 +23,20 @@ import lombok.ToString;
 @Getter
 @Table("accounts")
 /* Just for reading on DB */
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor_ = @PersistenceCreator)
 public class Account {
     
     @Id
-    private UUID accountId;
+    private final UUID accountId;
     
-	private String email;
-	private String phoneNo;
-    private String accountType;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+	private final String email;
+	private final String phoneNo;
+    private final String accountType;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     public Account(EmailVo emailVo, PhoneNoVo phoneNoVo, AccountTypeVo accountTypeVo, StampsVo stampsVo) {
+        this.accountId = null;
         this.email = emailVo.email();
         this.phoneNo = phoneNoVo.phoneNo();
         this.accountType = accountTypeVo.accountType();

@@ -9,26 +9,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 
-import com.hotspots.publi_connect.iam.api.dto.auth.RegisterUserRequest;
-import com.hotspots.publi_connect.iam.app.UserRegistrationService;
-import com.hotspots.publi_connect.kernel.utils.mappers.RegisterUserRequestMapper;
+import com.hotspots.publi_connect.iam.api.dto.auth.LoginAccountRequest;
+import com.hotspots.publi_connect.iam.app.LoginAccountUseCase;
+import com.hotspots.publi_connect.kernel.utils.mappers.LoginAccountInputMapper;
 
 import jakarta.validation.Valid;
 import lombok.Data;
 import reactor.core.publisher.Mono;
+
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth")
 @Validated
 @Data
-public class UserController {
-	private final UserRegistrationService userRegistrationService;
-	private final RegisterUserRequestMapper registerUserRequestMapper;
+public class AuthController {
+    private final LoginAccountUseCase loginAccountUseCase;
+	private final LoginAccountInputMapper loginAccountInputMapper;
 
-	@PostMapping
-	public Mono<Void> register(@Valid @RequestBody Mono<RegisterUserRequest> request, ServerWebExchange exchange) {
+	@PostMapping("/login")
+	public Mono<Void> register(@Valid @RequestBody Mono<LoginAccountRequest> request, ServerWebExchange exchange) {
 		return request.flatMap(req -> {
 			ServerHttpResponse response = exchange.getResponse();
-			return userRegistrationService.registerUser(registerUserRequestMapper.toValidatedRequest(req))
+			return loginAccountUseCase.loginAccount(loginAccountInputMapper.toInput(req))
 				.flatMap(responseCookies -> {
 					response.addCookie(responseCookies.sessionCookie());
 					response.addCookie(responseCookies.refreshCookie());
@@ -37,5 +38,4 @@ public class UserController {
 				});
 		});
 	}
-
 }
