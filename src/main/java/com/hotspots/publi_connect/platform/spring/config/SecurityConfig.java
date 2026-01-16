@@ -48,7 +48,7 @@ public class SecurityConfig {
                     .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                     .securityContextRepository(statelessTokenRepository)
                     .authorizeExchange(ex ->
-                        ex.pathMatchers("/public/**", "/auth/**").permitAll()
+                        ex.pathMatchers("/public/**", "/auth/**", "/videos/**").permitAll()
                             .pathMatchers(HttpMethod.POST, "/users").permitAll()
                             .anyExchange().authenticated()
                     )
