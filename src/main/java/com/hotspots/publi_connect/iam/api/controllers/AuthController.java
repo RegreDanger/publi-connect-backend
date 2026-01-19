@@ -38,4 +38,10 @@ public class AuthController {
 				});
 		});
 	}
+
+	@GetMapping("/csrf")
+	public Mono<Map<String, String>> csrf(CsrfToken token) {
+		return Mono.just(Map.of("csrfToken"), token.getToken());
+	}
+
 }
