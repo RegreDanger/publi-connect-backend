@@ -1,5 +1,6 @@
 package com.hotspots.publi_connect.iam.domain.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +21,12 @@ public class AuthService {
 	private final TokenService jwt;
 	private final JwtConfig jwtConfig;
 
+	@Value("${cookies.secure:true}")
+	private boolean cookieSecure;
+
+	@Value("${cookies.same-site:None}")
+	private String cookieSameSite;
+
 	public Mono<CreateSessionResult> createSession(@NotNull @Valid UUIDVo accountIdVo) {
 
 		return Mono.just(accountIdVo).map(accountIdVoMapping -> {
@@ -31,21 +38,21 @@ public class AuthService {
 
 	private CreateSessionResult buildCookies(String sessionToken, String refreshToken, long expirationTime, long refreshTime) {
 		ResponseCookie sessionCookie = ResponseCookie
-											.from("session_token", sessionToken)
-											.httpOnly(true)
-											.secure(true)
-											.path("/")
-											.maxAge(expirationTime/1000)
-											.sameSite("None")
-											.build();
+												.from("session_token", sessionToken)
+												.httpOnly(true)
+												.secure(cookieSecure)
+												.path("/")
+												.maxAge(expirationTime/1000)
+												.sameSite(cookieSameSite)
+												.build();
 		ResponseCookie refreshCookie = ResponseCookie
-											.from("refresh_token", refreshToken)
-											.httpOnly(true)
-											.secure(true)
-											.path("/")
-											.maxAge(refreshTime/1000)
-											.sameSite("None")
-											.build();
+												.from("refresh_token", refreshToken)
+												.httpOnly(true)
+												.secure(cookieSecure)
+												.path("/")
+												.maxAge(refreshTime/1000)
+												.sameSite(cookieSameSite)
+												.build();
 		return new CreateSessionResult(sessionCookie, refreshCookie);
 	}
 

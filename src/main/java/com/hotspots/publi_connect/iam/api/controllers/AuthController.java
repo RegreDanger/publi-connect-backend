@@ -1,8 +1,12 @@
 package com.hotspots.publi_connect.iam.api.controllers;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,8 +44,20 @@ public class AuthController {
 	}
 
 	@GetMapping("/csrf")
-	public Mono<Map<String, String>> csrf(CsrfToken token) {
-		return Mono.just(Map.of("csrfToken"), token.getToken());
+	public Mono<Map<String, String>> csrf(ServerWebExchange exchange) {
+		Object csrfAttribute = exchange.getAttribute(CsrfToken.class.getName());
+
+		if (csrfAttribute instanceof Mono<?> csrfMono) {
+			return csrfMono
+					.cast(CsrfToken.class)
+					.map(token -> Map.of("csrfToken", token.getToken()));
+		}
+
+		if (csrfAttribute instanceof CsrfToken csrfToken) {
+			return Mono.just(Map.of("csrfToken", csrfToken.getToken()));
+		}
+
+		return Mono.error(new IllegalStateException("CSRF token not available in exchange attributes"));
 	}
 
 }

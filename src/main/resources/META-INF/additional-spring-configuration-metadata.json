@@ -18,5 +18,15 @@
     "name": "cors.allowed-origins",
     "type": "java.lang.String",
     "description": "Origins allowed for CORS'"
+  },
+  {
+    "name": "cookies.secure",
+    "type": "java.lang.Boolean",
+    "description": "Whether auth and CSRF cookies should be set with Secure flag"
+  },
+  {
+    "name": "cookies.same-site",
+    "type": "java.lang.String",
+    "description": "SameSite policy for auth and CSRF cookies (None, Lax, Strict)"
   }
 ]}
