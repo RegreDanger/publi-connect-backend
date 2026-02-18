@@ -28,4 +28,7 @@ jwt:
   refresh:
     time: 25920000000
 cors:
-  allowed-origins: ${FRONT_ORIGIN}
+  allowed-origins: ${FRONT_ORIGIN:http://localhost:5173}
+cookies:
+  secure: false
+  same-site: Lax

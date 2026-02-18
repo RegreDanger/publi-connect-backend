@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
@@ -44,8 +45,9 @@ public class AuthController {
 	}
 
 	@GetMapping("/csrf")
-	public Mono<Map<String, String>> csrf(CsrfToken token) {
-		return Mono.just(Map.of("csrfToken", token.getToken()));
+	public Mono<Map<String, String>> csrf(
+			@RequestAttribute(name = "org.springframework.security.web.server.csrf.CsrfToken") Mono<CsrfToken> csrfToken) {
+		return csrfToken.map(token -> Map.of("csrfToken", token.getToken()));
 	}
 
 }
