@@ -12,15 +12,19 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.csrf.CsrfToken;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.server.WebFilter;
 
 import com.hotspots.publi_connect.platform.spring.auth.TokenAuthManager;
 import com.hotspots.publi_connect.platform.spring.context.StatelessTokenSecurityContextRepository;
+
+import reactor.core.publisher.Mono;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -97,6 +101,14 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    WebFilter csrfCookieWebFilter() {
+        return (exchange, chain) -> {
+            Mono<CsrfToken> csrfTokenMono = exchange.getAttributeOrDefault(CsrfToken.class.getName(), Mono.empty());
+            return csrfTokenMono.doOnSuccess(token -> {}).then(chain.filter(exchange));
+        };
     }
 
     private List<String> resolveAllowedOrigins() {
